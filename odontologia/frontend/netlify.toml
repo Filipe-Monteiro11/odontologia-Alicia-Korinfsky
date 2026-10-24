@@ -1,0 +1,4 @@
+[build]
+  base = "odontologia/frontend"
+  command = "npm run build"
+  publish = "dist"
