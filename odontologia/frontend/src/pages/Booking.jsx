@@ -1,3 +1,4 @@
+
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import {
@@ -96,13 +97,25 @@ const PROCEDURES = [
 
 const WHATSAPP_NUMBER = "5581996592005";
 
-function getWhatsAppUrl(procedure) {
-  const message = `Olá! Gostaria de saber mais sobre ${procedure} e conversar sobre um possível agendamento.`;
+function getWhatsAppUrl(procedures) {
+  const names = procedures.map((procedure) => procedure.name);
+
+  const message =
+    names.length === 1
+      ? `Olá! Gostaria de saber mais sobre ${names[0]} e conversar sobre um possível agendamento.`
+      : `Olá! Gostaria de saber mais sobre os seguintes tratamentos:\n\n${names
+          .map((name) => `• ${name}`)
+          .join("\n")}\n\nPoderíamos conversar sobre um possível agendamento?`;
 
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 }
 
-function ProcedureDetails({ procedure, onClose, onSelect }) {
+function ProcedureDetails({
+  procedure,
+  isSelected,
+  onClose,
+  onSelect,
+}) {
   const modalRef = useRef(null);
   const closeRef = useRef(null);
 
@@ -191,9 +204,7 @@ function ProcedureDetails({ procedure, onClose, onSelect }) {
 
         <div className="procedure-modal-content">
           <h3>Sobre o tratamento</h3>
-
           <p id="procedure-modal-description">{procedure.details}</p>
-
           <small>
             A indicação e o planejamento dependem de avaliação
             odontológica individualizada.
@@ -214,8 +225,8 @@ function ProcedureDetails({ procedure, onClose, onSelect }) {
             className="procedure-modal-select"
             onClick={() => onSelect(procedure)}
           >
-            <Check size={17} />
-            Escolher tratamento
+            {isSelected ? <X size={17} /> : <Check size={17} />}
+            {isSelected ? "Remover tratamento" : "Adicionar tratamento"}
           </button>
         </footer>
       </section>
@@ -224,10 +235,12 @@ function ProcedureDetails({ procedure, onClose, onSelect }) {
 }
 
 export default function Booking() {
-  const [selected, setSelected] = useState(null);
+  const [selected, setSelected] = useState([]);
   const [opened, setOpened] = useState(null);
   const footerRef = useRef(null);
   const scrollPendingRef = useRef(false);
+
+  const hasSelection = selected.length > 0;
 
   useEffect(() => {
     if (opened || !scrollPendingRef.current) return;
@@ -252,9 +265,15 @@ export default function Booking() {
     setOpened(null);
   }
 
-  function selectProcedure(procedure) {
+  function toggleProcedure(procedure) {
     scrollPendingRef.current = true;
-    setSelected(procedure);
+
+    setSelected((current) =>
+      current.some((item) => item.name === procedure.name)
+        ? current.filter((item) => item.name !== procedure.name)
+        : [...current, procedure]
+    );
+
     setOpened(null);
   }
 
@@ -279,19 +298,20 @@ export default function Booking() {
       <main className="container procedure-main">
         <div className="procedure-intro">
           <span>TRATAMENTOS ODONTOLÓGICOS</span>
-
           <h1>Encontre o cuidado que você procura</h1>
 
           <p>
             Conheça os procedimentos oferecidos pela Dra. Alícia Korinfsky.
             Clique em um tratamento para saber mais e converse com nossa
-            equipe pelo WhatsApp.
+            equipe pelo WhatsApp. Você pode escolher mais de um tratamento.
           </p>
         </div>
 
         <div className="procedure-grid">
           {PROCEDURES.map((procedure) => {
-            const isSelected = selected?.name === procedure.name;
+            const isSelected = selected.some(
+              (item) => item.name === procedure.name
+            );
 
             return (
               <button
@@ -300,6 +320,7 @@ export default function Booking() {
                 className={`procedure-card${isSelected ? " is-selected" : ""}`}
                 onClick={() => setOpened(procedure)}
                 aria-label={`Saiba mais sobre ${procedure.name}`}
+                aria-pressed={isSelected}
               >
                 {procedure.image ? (
                   <img
@@ -339,19 +360,36 @@ export default function Booking() {
         <section ref={footerRef} className="procedure-footer">
           <div>
             <span className="procedure-footer-label">
-              TRATAMENTO ESCOLHIDO
+              {selected.length === 1
+                ? "TRATAMENTO ESCOLHIDO"
+                : "TRATAMENTOS ESCOLHIDOS"}
             </span>
 
-            <h2>{selected?.name || "Selecione um procedimento"}</h2>
+            {hasSelection ? (
+              <>
+                <h2>
+                  {selected.length}{" "}
+                  {selected.length === 1
+                    ? "tratamento selecionado"
+                    : "tratamentos selecionados"}
+                </h2>
+
+                <p>
+                  {selected.map((procedure) => procedure.name).join(" • ")}
+                </p>
+              </>
+            ) : (
+              <h2>Selecione um procedimento</h2>
+            )}
 
             <p>
               A data e o horário serão combinados diretamente com nossa equipe.
             </p>
           </div>
 
-          {selected ? (
+          {hasSelection ? (
             <a
-              href={getWhatsAppUrl(selected.name)}
+              href={getWhatsAppUrl(selected)}
               target="_blank"
               rel="noopener noreferrer"
               className="procedure-cta"
@@ -372,8 +410,11 @@ export default function Booking() {
       {opened && (
         <ProcedureDetails
           procedure={opened}
+          isSelected={selected.some(
+            (item) => item.name === opened.name
+          )}
           onClose={closeModal}
-          onSelect={selectProcedure}
+          onSelect={toggleProcedure}
         />
       )}
     </div>
