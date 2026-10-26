@@ -46,17 +46,17 @@ const PROCEDURES = [
       "O tratamento de canal é indicado quando a polpa, tecido localizado no interior do dente, apresenta inflamação ou infecção. O procedimento trata e preenche os canais internos, buscando preservar o dente quando possível.",
   },
   {
-  name: "Próteses dentárias",
-  image: "/images-optimized/proteses.webp",
-  description:
-    "Próteses parciais removíveis, flexíveis e totais para substituir dentes ausentes e recuperar a mastigação.",
-  details:
+    name: "Próteses dentárias",
+    image: "/images-optimized/proteses.webp",
+    description:
+      "Próteses parciais removíveis, flexíveis e totais para substituir dentes ausentes e recuperar a mastigação.",
+    details:
       "Recupere seu sorriso, a mastigação e a confiança com nossas opções de próteses dentárias.\n\n" +
       "• PPR: substitui alguns dentes ausentes.\n" +
       "• FLEX: prótese removível, flexível e discreta.\n" +
       "• PT: substitui todos os dentes de uma arcada.\n\n" +
       "Nossa equipe ajuda você a escolher a opção ideal após uma avaliação.",
-},
+  },
   {
     name: "Clareamento dental",
     image: "/images/clareamento-dental.png",
@@ -191,7 +191,9 @@ function ProcedureDetails({ procedure, onClose, onSelect }) {
 
         <div className="procedure-modal-content">
           <h3>Sobre o tratamento</h3>
+
           <p id="procedure-modal-description">{procedure.details}</p>
+
           <small>
             A indicação e o planejamento dependem de avaliação
             odontológica individualizada.
@@ -224,14 +226,36 @@ function ProcedureDetails({ procedure, onClose, onSelect }) {
 export default function Booking() {
   const [selected, setSelected] = useState(null);
   const [opened, setOpened] = useState(null);
+  const footerRef = useRef(null);
+  const scrollPendingRef = useRef(false);
+
+  useEffect(() => {
+    if (opened || !scrollPendingRef.current) return;
+
+    scrollPendingRef.current = false;
+
+    const frame = requestAnimationFrame(() => {
+      const prefersReducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches;
+
+      footerRef.current?.scrollIntoView({
+        behavior: prefersReducedMotion ? "instant" : "smooth",
+        block: "center",
+      });
+    });
+
+    return () => cancelAnimationFrame(frame);
+  }, [selected, opened]);
 
   function closeModal() {
     setOpened(null);
   }
 
   function selectProcedure(procedure) {
+    scrollPendingRef.current = true;
     setSelected(procedure);
-    closeModal();
+    setOpened(null);
   }
 
   return (
@@ -301,7 +325,9 @@ export default function Booking() {
                   </span>
 
                   <span className="procedure-select">
-                    {isSelected ? "Selecionado · Ver detalhes" : "Saiba mais"}
+                    {isSelected
+                      ? "Selecionado · Ver detalhes"
+                      : "Saiba mais"}
                     <ArrowRight size={15} />
                   </span>
                 </span>
@@ -310,7 +336,7 @@ export default function Booking() {
           })}
         </div>
 
-        <section className="procedure-footer">
+        <section ref={footerRef} className="procedure-footer">
           <div>
             <span className="procedure-footer-label">
               TRATAMENTO ESCOLHIDO

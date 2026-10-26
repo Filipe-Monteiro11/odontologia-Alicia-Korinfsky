@@ -200,11 +200,22 @@
   border: 1px solid #ded6ce;
   border-radius: 6px;
   background: #f0ebe6;
+  scroll-margin-block: 24px;
+  transition:
+    border-color 300ms ease,
+    background-color 300ms ease,
+    box-shadow 300ms ease;
 }
 
 .procedure-footer h2 {
   margin: 9px 0;
   font-size: 20px;
+}
+
+.procedure-footer:has(.procedure-cta:not(.is-disabled)) {
+  border-color: #cbb5a2;
+  background: #f4ece4;
+  box-shadow: 0 8px 28px rgba(74, 54, 40, 0.07);
 }
 
 .procedure-cta {
@@ -221,16 +232,27 @@
   font-weight: 700;
   text-align: center;
   white-space: nowrap;
+  transition:
+    background-color 200ms ease,
+    transform 200ms ease,
+    box-shadow 200ms ease;
 }
 
 .procedure-cta:hover {
+  transform: translateY(-2px);
   background: #51473f;
+  box-shadow: 0 6px 16px rgba(48, 48, 48, 0.15);
   color: #fff;
 }
 
 .procedure-cta.is-disabled {
   background: #b7b0aa;
   cursor: not-allowed;
+}
+
+.procedure-cta.is-disabled:hover {
+  transform: none;
+  box-shadow: none;
 }
 
 /* Janela de detalhes */
@@ -408,6 +430,7 @@
     flex-direction: column;
     align-items: stretch;
     padding: 22px;
+    scroll-margin-block: 16px;
   }
 
   .procedure-cta {
@@ -449,5 +472,16 @@
 
   .procedure-brand img {
     height: 55px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .procedure-footer,
+  .procedure-cta {
+    transition: none;
+  }
+
+  .procedure-cta:hover {
+    transform: none;
   }
 }
