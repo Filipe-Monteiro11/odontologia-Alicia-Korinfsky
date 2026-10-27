@@ -13,8 +13,11 @@ import "../styles/home.css";
 
 const WHATSAPP = "https://wa.me/5581996592005";
 const INSTAGRAM = "https://instagram.com/dentista.aliciakorinfsky";
+
 const ADDRESS = "Rua Vila Nova, 622, Loja 29, Centro, Camaragibe, PE";
+
 const MAPS = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(ADDRESS)}`;
+
 const MAP_EMBED = `https://maps.google.com/maps?q=${encodeURIComponent(ADDRESS)}&output=embed`;
 
 const SERVICES = [
@@ -45,6 +48,7 @@ export default function Home() {
     if (!openPhoto) return;
 
     const previousOverflow = document.body.style.overflow;
+
     document.body.style.overflow = "hidden";
     closeRef.current?.focus();
 
@@ -104,7 +108,11 @@ export default function Home() {
               <h1>Atenção e cuidado para o seu sorriso.</h1>
 
               <p>
-                Com atuação especializada em mais de sete áreas da odontologia e em estética facial com Botox, a clínica da Dra. Alícia Korinfsky reúne uma equipe multidisciplinar e técnicas avançadas para oferecer tratamentos que valorizam sua saúde, beleza e bem-estar.
+                Com atuação especializada em mais de sete áreas da
+                odontologia e em estética facial com Botox, a clínica
+                da Dra. Alícia Korinfsky reúne uma equipe
+                multidisciplinar e técnicas avançadas para oferecer
+                tratamentos que valorizam sua saúde, beleza e bem-estar.
               </p>
 
               <div className="home-actions">
@@ -242,16 +250,6 @@ export default function Home() {
               As indicações e os resultados dos tratamentos dependem
               das características de cada paciente.
             </p>
-
-            <div className="home-gallery-action">
-              <Link
-                to="/agendar"
-                className="home-button home-button-outline"
-              >
-                Conhecer nossos procedimentos
-                <ArrowRight size={17} />
-              </Link>
-            </div>
           </div>
         </section>
 
@@ -287,108 +285,112 @@ export default function Home() {
           </div>
         </section>
 
-        
-<section id="contato" className="home-section home-contact">
-  <div className="container">
-    <div className="home-section-heading">
-      <span className="home-eyebrow">CONTATO</span>
-      <h2>Estamos à sua disposição</h2>
-      <p>
-        Entre em contato com a equipe ou conheça
-        a localização do consultório.
-      </p>
-    </div>
-
-    <div className="home-contact-grid">
-      <div className="home-contact-stack">
-        <div className="home-contact-card">
-          <Phone size={23} />
-
-          <h3>WhatsApp</h3>
-          <p>(81) 99659-2005</p>
-
-          <a
-            href={WHATSAPP}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Enviar mensagem
-            <ArrowRight size={16} />
-          </a>
-        </div>
-
-        <div className="home-contact-card">
-          <Camera size={23} />
-
-          <h3>Instagram</h3>
-          <p>@dentista.aliciakorinfsky</p>
-
-          <a
-            href={INSTAGRAM}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Acessar perfil
-            <ArrowRight size={16} />
-          </a>
-        </div>
-      </div>
-
-      <div className="home-contact-card home-contact-address">
-        <MapPin size={23} />
-
-        <h3>Onde estamos</h3>
-
-        <p>
-          Rua Vila Nova, 622, Loja 29
-          <br />
-          Centro, Camaragibe - PE
-        </p>
-
-        <div className="home-contact-map">
-          <iframe
-            src={MAP_EMBED}
-            title="Localização do consultório da Dra. Alícia Korinfsky"
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-            allowFullScreen
-          />
-        </div>
-
-        <a
-          href={MAPS}
-          target="_blank"
-          rel="noopener noreferrer"
+        <section
+          id="contato"
+          className="home-section home-contact"
         >
-          Ver localização
-          <ArrowRight size={16} />
-        </a>
-      </div>
-    </div>
+          <div className="container">
+            <div className="home-section-heading">
+              <span className="home-eyebrow">
+                CONTATO
+              </span>
 
-    <div className="home-hours">
-      <div>
-        <Clock3 size={21} />
-        <strong>Horário de funcionamento</strong>
-      </div>
+              <h2>Estamos à sua disposição</h2>
 
-      <p>
-        Segunda a sexta: 09h às 17h
-        <br />
-        Sábado: 09h às 12h
-        <br />
-        Domingo: fechado
-      </p>
-    </div>
-  </div>
-</section>
+              <p>
+                Entre em contato com a equipe ou conheça
+                a localização do consultório.
+              </p>
+            </div>
 
+            <div className="home-contact-grid">
+              <div className="home-contact-stack">
+                <div className="home-contact-card">
+                  <Phone size={23} />
+
+                  <h3>WhatsApp</h3>
+                  <p>(81) 99659-2005</p>
+
+                  <a
+                    href={WHATSAPP}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Enviar mensagem
+                    <ArrowRight size={16} />
+                  </a>
+                </div>
+
+                <div className="home-contact-card">
+                  <Camera size={23} />
+
+                  <h3>Instagram</h3>
+                  <p>@dentista.aliciakorinfsky</p>
+
+                  <a
+                    href={INSTAGRAM}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Acessar perfil
+                    <ArrowRight size={16} />
+                  </a>
+                </div>
+              </div>
+
+              <div className="home-contact-card home-contact-address">
+                <MapPin size={23} />
+
+                <h3>Onde estamos</h3>
+
+                <p>
+                  Rua Vila Nova, 622, Loja 29
+                  <br />
+                  Centro, Camaragibe - PE
+                </p>
+
+                <div className="home-contact-map">
+                  <iframe
+                    src={MAP_EMBED}
+                    title="Localização do consultório da Dra. Alícia Korinfsky"
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    allowFullScreen
+                  />
+                </div>
+
+                <a
+                  href={MAPS}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Ver localização
+                  <ArrowRight size={16} />
+                </a>
+              </div>
+            </div>
+
+            <div className="home-hours">
+              <div>
+                <Clock3 size={21} />
+                <strong>Horário de funcionamento</strong>
+              </div>
+
+              <p>
+                Segunda a sexta: 09h às 17h
+                <br />
+                Sábado: 09h às 12h
+                <br />
+                Domingo: fechado
+              </p>
+            </div>
+          </div>
+        </section>
       </main>
 
       <footer className="home-footer">
         <div className="container home-footer-inner">
           <strong>Dra. Alícia Korinfsky</strong>
-
           <span>© 2026 · Camaragibe, PE</span>
         </div>
       </footer>
